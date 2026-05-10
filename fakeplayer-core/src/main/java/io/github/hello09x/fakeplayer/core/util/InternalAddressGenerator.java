@@ -11,19 +11,14 @@ public class InternalAddressGenerator {
     private final AtomicInteger next = new AtomicInteger(1);
 
     /**
-     * 判断 IP 地址能否由本工具类生成
      *
-     * @param address 地址
-     * @return 能否生成
      */
     public static boolean canBeGenerated(@NotNull InetAddress address) {
         return address.getAddress()[0] == 127;
     }
 
     /**
-     * 获取下一个 IP 地址
      *
-     * @return IP 地址
      */
     @SneakyThrows
     public @NotNull InetAddress next() {

@@ -10,10 +10,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.protocol.game.ServerboundClientCommandPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
+import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
+import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ParticleStatus;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.ChatVisiblity;
 import net.minecraft.world.level.storage.ValueInputContextHelper;
@@ -251,6 +254,16 @@ public class NMSServerPlayerImpl implements NMSServerPlayer {
                 new BlockPos(0, 0, 0),
                 Direction.DOWN
         ));
+    }
+
+    @Override
+    public void setCarriedItem(int slot) {
+        handle.connection.handleSetCarriedItem(new ServerboundSetCarriedItemPacket(slot));
+    }
+
+    @Override
+    public void swingMainHand() {
+        handle.connection.handleAnimate(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
     }
 
 }

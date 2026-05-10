@@ -12,7 +12,6 @@ public abstract class BaseActionTicker implements ActionTicker {
     protected final NMSBridge bridge;
 
     /**
-     * 这个类无法初始化的动作, 由子类完成
      */
     @UnknownNullability
     protected Action action;
@@ -30,14 +29,13 @@ public abstract class BaseActionTicker implements ActionTicker {
             case DROP_ITEM -> new DropItemAction(nms.fromPlayer(player));
             case DROP_STACK -> new DropStackAction(nms.fromPlayer(player));
             case DROP_INVENTORY -> new DropInventoryAction(nms.fromPlayer(player));
-            default -> null;    // 子类需要实现其他 Action
+            default -> null;
         };
     }
 
 
     @Override
     public boolean tick() {
-        // 修复使用盾牌无法停止
         if (this.setting.equals(ActionSetting.stop())) {
             this.action.stop();
             return true;
@@ -61,7 +59,6 @@ public abstract class BaseActionTicker implements ActionTicker {
                 }
             }
         } finally {
-            // 声音更新抑制器会抛出异常, 但同样需要进入冷却
             this.setting.wait = this.setting.interval;
         }
 

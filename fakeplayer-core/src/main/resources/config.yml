@@ -1,288 +1,253 @@
 # =========================================================================================================
-#                               【Important】
-#  DO NOT EDIT config.tmpl.yml !!!
-#  Copy and rename this file to config.yml as your configuration file.
-#  Any changes to this file will be reverted.
-#  -------------------------------------------------------------------------------------------------------
-#                               【非常重要】
-#  不要修改 config.tmpl.yml !!!
-#  复制此文件并重命名为 config.yml 来作为你的配置文件
-#  此文件的任何修改将会在服务器启动时被还原
+# Important
+# DO NOT EDIT config.tmpl.yml !!!
+# Copy and rename this file to config.yml as your configuration file.
+# Any changes to this file will be reverted.
 # =========================================================================================================
 
 # DO NOT EDIT
-# 不要修改
-version: 19
+version: 25
 
-# 多国语言配置
-# 可选项: en, zh, zh_cn, zh_tw, zh_hk
-# Language
+# Language settings.
 # Options: en, zh, zh_cn, zh_tw, zh_hk
 i18n:
-  locale: zh
-  message_prefix: '&7[&b假人&7] '
+  locale: en
+  message_prefix: '&7[&bFakePlayer&7] '
 
 
-# 服务器最多存在多少个假人
-# 默认: 1000
-# Define the maximum number of fake players on the server at the same time
-# default: 1000
+# Maximum number of fake players allowed on the server at the same time.
+# Default: 1000
 server-limit: 1000
 
 
-# 每个玩家最多创建多少个假人
-# 默认: 1
-# Define the maximum number of fake players each player can spawn
+# Maximum number of fake players each player can spawn.
 # Default: 1
 player-limit: 1
 
 
-# 如果启用, 则一个 IP 只能创建 `player-limit` 个假人
-# 能够避免玩家开小号疯狂创建假人
-# Define whether to check if players with the same IP sharing `player-limit`
+# If enabled, players sharing the same IP address also share the player-limit value.
 detect-ip: true
 
 
-# 假人存活时间, 0 表示永久
-# 单位: 分钟
-# Define the maximum lifespan of fake players
-# Unit: minute, `0` represents permanent
+# Maximum lifespan for fake players.
+# Unit: minutes. Set to 0 for permanent fake players.
 lifespan: 0
 
 
-# 假人默认名称模版
-# 如果为空, 则跟随创建者的名字并且加上后缀
-# 如果为其他值, 则使用该模版并且加上后缀
-# 这个值仅在使用 spawn 命令时没有自定义名称时生效
-# 占位符:
-#   %c: 创建者名称
-# 注意:
-#   1. 如果包含除 英文字母、数字、下划线 以外的字符，将会导致原版及第三方的许多命令失效
-#   2. 长度超过 16 位将会被截取
-#   3. 不能以 - 开头
-#   4. 反正我不建议你启用这个选项, 因为如果玩家给假人 res 权限之类的或者把一些物品给了假人, 其他玩家召唤了同名假人, 这可能会有风险
-# Name template of fake players
-# If this value is empty, fake players will use creators' name as their name and add a numerical suffix.
-# Otherwise, fake players will use this value as their names and add a numerical suffix.
+# Default fake player name template.
+# If this value is empty, fake players use the creator's name plus a numerical suffix.
+# Otherwise, fake players use this template plus a numerical suffix.
+# This only applies when the spawn command is used without a custom name.
 # Variables:
-#   %c: the name of the creator
-# Tips:
-#   1. If this value contains characters other than alphabetic, numbers, and underscores, many vanilla commands will not be usable on them.
-#   2. Characters longer than 16 characters will be truncated
-#   3. Cannot start with '-'
-#   4. It's not recommended, players may give them RES privileges, or put some items into their inventory.
+#   %c: creator name
+# Notes:
+#   1. Names containing characters other than letters, numbers, and underscores can break many vanilla
+#      and third-party commands.
+#   2. Names longer than 16 characters will be truncated.
+#   3. Names cannot start with '-'.
+#   4. This option is not recommended on public servers because reused names can inherit permissions,
+#      region access, or stored items from previous fake players.
 name-template: ''
 
-# 假人名称前缀
-# 自动生成的名称或者玩家创建时指定名称都将会追加前缀
-# Name prefix.
-# Prefix will be added to the generated name or specified name
+# Prefix added to generated and custom fake player names.
 name-prefix: ''
 
-# 假人自定义名称允许的字符
-#  格式: 正则表达式
-#  默认: '^[a-zA-Z0-9_]+$'
-# 注意:
-#   1. 如果允许了 英文字母、数字、下划线 以外的字符, 将会导致原版及第三方的许多命令失效
-#   2. 自定义名称需要玩家具有 `fakeplayer.spawn.name` 权限
-#   3. 如果你改了正则表达式, 请确保它以 `^` 开头并且以 `$` 结尾
+# Allowed characters for custom fake player names.
+# Format: regular expression
+# Default: '^[a-zA-Z0-9_]+$'
+# Notes:
+#   1. Allowing characters other than letters, numbers, and underscores can break many vanilla
+#      and third-party commands.
+#   2. Custom names require the fakeplayer.spawn.name permission.
+#   3. If you change this regular expression, keep it anchored with ^ and $.
 name-pattern: '^[a-zA-Z0-9_]+$'
 
-# 假人在 Tab 上的名称样式
-# Name style on Tab listing
+# Fake player name style in the player list.
 # Options:
-#   black, dark_blue, dark_green, dark_aqua, dark_red, dark_purple, gold, gray,
-#   dark_gray, blue, green, aqua, red, light_purple, yellow, white
+#   black, dark_blue, dark_green, dark_aqua, dark_red, light_purple, gold, gray,
+#   dark_gray, blue, green, aqua, red, dark_purple, yellow, white
 #   obfuscated, bold, strikethrough, underlined, italic
 name-style: gray, italic
 
 
-# 防止假人被其他插件踢掉, 这个选项用来兼容一些插件因为某些问题而踢掉假人
-# 可选项:
-#   NEVER: 不进行任何处理
-#   ON_SPAWNING: 创建时防止被踢出, 某些登陆插件会在加入时踢掉, 但不支持某些插件会在下 1 tick 时才踢的情况
-#   ALWAYS: 永远, 即除了本插件以外任何插件包括 /kick 命令都无法将假人踢掉
-# Prevent some plugins kick our fake players, enabling this option may resolve some compatibility issues with login plugins.
+# Prevent other plugins from kicking fake players.
+# This can help with compatibility issues caused by login plugins or kick commands.
 # Options:
 #   NEVER: do not prevent kicking
-#   ON_SPAWNING: only prevent kicking when fake players is spawning, but some plugin will kick them on the next tick, in such causes you should use `ALWAYS`
-#   ALWAYS: always prevent kicking from other plugins and command `/kick`
+#   ON_SPAWNING: only prevent kicking while fake players are spawning
+#   ALWAYS: always prevent kicks from other plugins and the /kick command
 prevent-kicking: ON_SPAWNING
 
 
-# 跟随下线
-# 假人创建者下线时是否也跟着下线
-# 如果玩家只是切换服务器, 那么不会触发跟随下线
-# Define whether fake personas will be removed when the creator quited.
+# Remove fake players when their creator quits.
+# If the creator is only switching servers through a proxy, this may not trigger removal.
 follow-quiting: true
-# 默认情况下跟随下线逻辑是根据5分钟的定时任务进行，如果你想在玩家退出时立刻执行清理,可使用此选项
-# delay:玩家退出时延迟x秒执行(若玩家在x秒内重新上线则假人不会被删除)
-# remove fake personas immediately when the creator quited.
+
+# Run creator-quit cleanup immediately instead of waiting for the periodic cleanup task.
+# Delay is measured in seconds. If the creator reconnects during the delay, fake players are kept.
 follow-quiting-force: true
 follow-quiting-force-delay: 3
 
 
-# 退出时是否丢弃背包物品
-# Define whether fake players will drop items from their inventory when they remove.
+# Drop fake player inventory items when fake players are removed.
 drop-inventory-on-quiting: false
 
 
-# 是否保存假人存档, 如果你将这个设置改成 `false`, 你可能还需要将 `drop-inventory-on-quiting` 设置为 `true` 以防玩家放置一些物品到假人的背包
-# 默认: true
-# Define whether persist player's data, if this value is `false`,
-# you may need to set `drop-inventory-on-quiting` as `true` in case players will put some items in their inventory
-# 默认: true
+# Persist fake player data.
+# If this is false, consider setting drop-inventory-on-quiting to true so players cannot store items
+# in fake player inventories.
+# Default: true
 persistent-data: true
 
 
-# 死亡时是否踢出游戏, 如果设置为 false, 那么玩家可以通过 /fp respawn 命令重生
-# Define whether kick the fake player who was dead,
-# if this value is false, players can type command '/fp respawn' to respawn him
-kick-on-dead: true
+# Kick dead fake players.
+# If false, players can use /fp respawn to respawn them.
+kick-on-dead: false
+
+# Automatically respawn fake players after they die.
+# This takes priority over kick-on-dead when enabled.
+# Default: true
+auto-respawn-on-death: true
 
 
-# 服务器最近 1 分钟平均 TPS 低于这个值将降低 1 假人上限，玩家超出上限的假人将被移除
-# 每 60 秒检测一次，持续卡顿将降低假人上限降直至 0；无卡顿则恢复 1 上限直至初始值
-# 默认: 0, 即不开启, 因为移除假人可能导致玩家红石机器出问题, 按需开启吧
-# Server will detect tps every 5 minutes, if the average tps is lower than this value, fakeplayer limits will gradually reduce to 0
-# Default: 0, means disabled
-# Tips:
-#    It's not recommended to enable this option, as it may cause the redstone machine to malfunction
+# Stress test controls used by /fp stress commands.
+# These commands are OP-only and can spawn or drive many fake players.
+stress:
+  default-profile: default
+  profiles:
+    default:
+      spawn:
+        batch-size: 5
+        batch-interval-ticks: 1
+      spread:
+        # SAME_Y: keep the command sender's Y level.
+        # SURFACE: place each bot on the highest block at its random X/Z.
+        y-mode: SAME_Y
+      random-walk:
+        tick-interval: 5
+        direction-change-min-ticks: 20
+        direction-change-max-ticks: 80
+        speed: 1.0
+        sprint-chance: 0.25
+        sneak-chance: 0.05
+        jump-chance: 0.03
+        use-chance: 0.02
+        attack-chance: 0.02
+        use-action-cooldown-ticks: 20
+        attack-action-cooldown-ticks: 20
+        max-use-actions-per-tick: 10
+        max-attack-actions-per-tick: 10
+        hotbar-change-chance: 0.05
+        swap-offhand-chance: 0.01
+      mirror:
+        movement: true
+        look: true
+        actions: true
+        commands: true
+        commands-as-op: true
+        input-sync-window-ticks: 100
+        debug-inputs: false
+        command-ignore-prefixes:
+          - /fp
+          - /fakeplayer
+
+
+# Server TPS protection.
+# If the average TPS drops below this value, fake player limits are gradually reduced.
+# Default: 0, disabled.
+# Note: enabling this can disrupt redstone machines or other fake-player-dependent setups.
 kale-tps: 0
 
 
-# Invsee implement:
+# Inventory view implementation.
 # Options:
-#   AUTO: Auto choose a implement depends on server plugins. Supports: OpenInv
-#   SIMPLE: A simple implement, with it, you can NOT visit or modify equipments
-# Invsee 实现:
-# 可选项:
-#   AUTO: 自动，自动根据服务器安装的插件来选择, 当前支持的插件: OpenInv
-#   SIMPLE: 一个简单的内嵌实现, 使用这个不能看到或者编辑假人的装备栏
+#   AUTO: choose an implementation based on installed plugins. Currently supports OpenInv.
+#   SIMPLE: built-in implementation; cannot view or edit equipment slots.
 invsee-implement: AUTO
 
 
-# Pre-Spawn-Commands
-# Server will execute the following commands BEFORE trying to spawn a fake player.
-# This is helpful for adding fake player into whitelist
+# Pre-spawn commands.
+# The server runs these commands before trying to spawn a fake player.
+# This is useful for adding fake players to a whitelist.
 # Variables:
-#   %p: the name of the fake player
-#   %u: the UUID of the fake player
-#   %c: the name of the creator
-# 服务器会在假人创建前执行这些命令
-# 这里可以添加类似于白名单的命令来保证后续创建过程的正常执行
-# 变量:
-#   %p: 假人的名称
-#   %u: 假人的 UUID
-#   %c: 创建人的名称
+#   %p: fake player name
+#   %u: fake player UUID
+#   %c: creator name
 pre-spawn-commands:
   - ''
   - ''
 
 
-# Post-Spawn-Commands
-# Server will execute the following commands DURING spawning (in PlayerJoinEvent).
+# Post-spawn commands.
+# The server runs these commands while the fake player is spawning, during PlayerJoinEvent.
 # Variables:
-#   %p: the name of the fake player
-#   %u: the UUID of the fake player
-#   %c: the name of the creator
-# 服务器会在假人正在加入游戏中执行这些命令
-# 变量:
-#   %p: 假人的名称
-#   %u: 假人的 UUID
-#   %c: 创建人的名称
+#   %p: fake player name
+#   %u: fake player UUID
+#   %c: creator name
 post-spawn-commands:
   - ''
   - ''
 
 
-# After-Spawn-Commands
-# Server will execute the following commands AFTER the fake player was spawned (after PlayerJoinEvent).
-# This is helpful for giving permission.
+# After-spawn commands.
+# The server runs these commands after the fake player has spawned, after PlayerJoinEvent.
+# This is useful for assigning permissions or groups.
 # Variables:
-#   %p: the name of the fake player
-#   %u: the UUID of the fake player
-#   %c: the name of the creator
-# 服务器会在假人创建后执行这里的命令
-# 这里可以添加一些权限组分配之类的命令
-# 变量:
-#   %p: 假人的名称
-#   %u: 假人的 UUID
-#   %c: 创建人的名称
+#   %p: fake player name
+#   %u: fake player UUID
+#   %c: creator name
 after-spawn-commands:
   - ''
   - ''
 
 
-# Self-Commands
-# The fake player will execute the following commands AFTER they were joined the server.
-# This is helpful for them to execute some login command.
-# Ensure the password is complex enough otherwise the login plugin might reject it.
+# Self commands.
+# The fake player runs these commands after joining the server.
+# This is useful for login commands.
+# Make sure passwords are strong enough for your login plugin.
 # Variables:
-#   %p: the name of the fake player
-#   %u: the UUID of the fake player
-#   %c: the name of the creator
-# 假人在加入游戏后会执行以下命令
-# 你可以添加一些登陆命令来让他们完成登陆过程
-# 变量:
-#   %p: 假人的名称
-#   %u: 假人的 UUID
-#   %c: 创建人的名称
+#   %p: fake player name
+#   %u: fake player UUID
+#   %c: creator name
 self-commands:
   - ''
   - ''
 
 
-# Post-Destroy-Commands
-# Server will execute the following commands when the fake player is quiting but not quited (in PlayerQuitEvent)
-# This is helpful for cleaning up their inventory if you want it
+# Post-quit commands.
+# The server runs these commands while the fake player is quitting, during PlayerQuitEvent.
+# The fake player is still present on the server when these commands run.
+# This is useful for cleaning inventories or plugin state.
 # Variables:
-#   %p: the name of the fake player
-#   %u: the UUID of the fake player
-#   %c: the name of the creator
-# 服务器会在假人正在退出时执行这些命令, 命令执行的那一刻假人还位于服务器
-# 你可以添加一些用来清空假人背包之类的命令
-# 变量:
-#   %p: 假人的名称
-#   %u: 假人的 UUID
-#   %c: 创建人的名称
+#   %p: fake player name
+#   %u: fake player UUID
+#   %c: creator name
 post-quit-commands:
   - ''
   - ''
 
 
-# Post-Destroy-Commands
-# Server will execute the following commands AFTER the fake player was quited. (after PlayerQuitEvent)
+# After-quit commands.
+# The server runs these commands after the fake player has quit, after PlayerQuitEvent.
+# This is useful for cleanup tasks such as removing whitelist entries or permissions.
 # Variables:
-#   %p: the name of the fake player
-#   %u: the UUID of the fake player
-#   %c: the name of the creator
-# 销毁后命令
-# 服务器会在假人退出游戏之后执行这些命令
-# 你可以添加一些清理白名单、取消权限分配、清理某些插件数据等命令
-# 变量:
-#   %p: 假人的名称
-#   %u: 假人的 UUID
-#   %c: 创建人的名称
+#   %p: fake player name
+#   %u: fake player UUID
+#   %c: creator name
 after-quit-commands:
   - ''
   - ''
 
 
-# 允许玩家让假人执行的命令
-# 在这里你可以放一些你服务器的命令，玩家就可以执行
-# 例如添加 /sit 之后, 玩家可以通过 '/fp cmd myfakeplayer sit' 让假人坐下来
-# ！！！注意: 在这里定义的命令, 不需要 fakeplayer.cmd 权限！！！
-# ！！！注意: 给了 fakeplayer.cmd 命令，玩家就能够控制假人执行所有(有权限的)命令！！！
-# Define which commands can be executed by `/fp cmd` without 'fakeplayer.cmd' permission
+# Commands allowed through /fp cmd without the fakeplayer.cmd permission.
+# Warning: granting fakeplayer.cmd lets players control fake players to run any command they have permission for.
 allow-commands:
   - ''
   - ''
 
-# Default Features of fake players
-# It takes effect when the player has never changed the config by '/fp config' or has no permission.
-# 默认假人特性
-# 当玩家没有通过 /fp config 更改过配置或者他没有权限时生效
+
+# Default fake player features.
+# These apply when the player has not changed settings with /fp config or lacks permission.
 default-features:
   collidable: true
   pickup_items: true
@@ -294,6 +259,6 @@ default-features:
   wolverine: false
 
 
-# 检测更新
-# 仅仅是检测, 并不会帮你下载
+# Check for updates.
+# This only checks for updates; it does not download them.
 check-for-updates: true

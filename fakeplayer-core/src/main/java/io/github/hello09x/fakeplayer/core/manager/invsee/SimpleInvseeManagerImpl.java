@@ -14,7 +14,6 @@ import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.translatable;
 
 /**
- * 默认实现, 无法看到装备栏
  *
  * @author tanyaofei
  * @since 2024/8/12

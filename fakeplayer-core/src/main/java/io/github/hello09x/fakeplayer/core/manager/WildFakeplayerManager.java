@@ -31,9 +31,7 @@ public class WildFakeplayerManager implements PluginMessageListener, Listener {
     private final static String SUB_CHANNEL = "PlayerList";
 
     /**
-     * 定义探测到连续 n 次不在线时进行清理
      * <br>
-     * 仅在 {@link #IS_BUNGEECORD} 为 {@code true} 时生效
      */
     private final static int CLEANUP_THRESHOLD = 2;
     private final static int CLEANUP_PERIOD = 6000;
@@ -50,7 +48,6 @@ public class WildFakeplayerManager implements PluginMessageListener, Listener {
         Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
     }
 
-    // 玩家离开后立刻触发一次清理，而不是等5分钟轮询
     @EventHandler
     public void handleFollowQuitingForce(PlayerQuitEvent event) {
         if (!config.isFollowQuiting() || !config.isFollowQuitingForce()) return;
@@ -91,9 +88,7 @@ public class WildFakeplayerManager implements PluginMessageListener, Listener {
     }
 
     /**
-     * 清除所有不在 {@code online} 列表中的玩家的假人
      *
-     * @param online 在线玩家
      */
     public void cleanup0(@NotNull Set<String> online) {
         @SuppressWarnings("all")
@@ -132,21 +127,17 @@ public class WildFakeplayerManager implements PluginMessageListener, Listener {
     }
 
     /**
-     * 清理召唤者下线的假人
      */
     public void cleanup() {
         if (!config.isFollowQuiting()) {
             return;
         }
 
-        // 非 bungeeCord 服务器立即清理
         if (!IS_BUNGEECORD) {
             this.cleanup0(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toSet()));
             return;
         }
 
-        // BungeeCord 服务器请求获取所有服务器在线玩家后
-        // 在接收到在线列表后再进行清理
         var recipient = Bukkit
                 .getServer()
                 .getOnlinePlayers()

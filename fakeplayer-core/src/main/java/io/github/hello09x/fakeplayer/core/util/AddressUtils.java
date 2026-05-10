@@ -14,11 +14,7 @@ import java.util.Optional;
 public class AddressUtils {
 
     /**
-     * 获取 IP 地址
-     * <p>如果不是玩家则返回 127.0.0.1, 如果该玩家已离线则返回 0.0.0.0 </p>
      *
-     * @param sender 玩家
-     * @return IP 地址
      */
     public static @NotNull String getAddress(@NotNull CommandSender sender) {
         if (sender instanceof Player p) {

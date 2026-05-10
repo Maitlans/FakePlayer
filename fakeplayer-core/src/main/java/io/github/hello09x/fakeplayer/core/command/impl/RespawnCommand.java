@@ -14,7 +14,6 @@ import static com.coderxi.plugin.utils.translation.MessageUtils.translatableWith
 public class RespawnCommand extends AbstractCommand {
 
     /**
-     * 重生
      */
     public void respawn(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = super.getFakeplayer(sender, args, Entity::isDead);

@@ -19,7 +19,6 @@ import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 public class DistanceCommand extends AbstractCommand {
 
     /**
-     * 查看距离
      */
     public void distance(@NotNull Player sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = super.getFakeplayer(sender, args);

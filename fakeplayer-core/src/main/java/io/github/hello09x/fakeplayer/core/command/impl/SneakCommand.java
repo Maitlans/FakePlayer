@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 public class SneakCommand extends AbstractCommand {
 
     /**
-     * 设置潜行
      */
     public void sneak(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = getFakeplayer(sender, args);

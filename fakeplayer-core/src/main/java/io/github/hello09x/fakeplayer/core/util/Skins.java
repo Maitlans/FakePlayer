@@ -12,11 +12,7 @@ import java.util.concurrent.CompletableFuture;
 public class Skins {
 
     /**
-     * 复制皮肤, 仅能复制在线玩家的皮肤
      *
-     * @param from 皮肤来源
-     * @param to   复制到
-     * @return 是否复制成功
      */
     public static boolean copySkin(@NotNull OfflinePlayer from, @NotNull Player to) {
         var profile = from.getPlayerProfile();
@@ -28,10 +24,7 @@ public class Skins {
     }
 
     /**
-     * 复制皮肤, 如果来源玩家不在线, 则通过 mojang API 下载皮肤后再复制
      *
-     * @param from 皮肤来源
-     * @param to   复制到
      */
     public static CompletableFuture<Boolean> copySkinFromMojang(@NotNull JavaPlugin plugin, @NotNull OfflinePlayer from, @NotNull Player to) {
         if (copySkin(from, to)) {

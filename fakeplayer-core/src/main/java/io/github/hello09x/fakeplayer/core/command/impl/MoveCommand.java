@@ -17,7 +17,6 @@ public class MoveCommand extends AbstractCommand {
     private final Map<UUID, BukkitTask> stopTasks = new HashMap<>();
 
     /**
-     * 假人移动
      */
     public CommandExecutor move(@Range(from = 0, to = 1) float forward, @Range(from = 0, to = 1) float strafing) {
         return (sender, args) -> {

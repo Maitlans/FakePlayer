@@ -11,22 +11,18 @@ public
 class ActionSetting implements Cloneable {
 
     /**
-     * 总次数
      */
     public final int maximum;
 
     /**
-     * 剩余次数
      */
     public int remains;
 
     /**
-     * 间隔
      */
     public int interval;
 
     /**
-     * 等待 ticks
      */
     public int wait;
 

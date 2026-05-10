@@ -86,6 +86,8 @@ permissions:
     description: 'Allow player to run /fp hold'
   fakeplayer.command.cmd:
     description: 'Allow player to run /fp cmd'
+  fakeplayer.command.stress:
+    description: 'Allow operator to run /fp stress'
   fakeplayer.config.replenish:
     description: 'Allow player to configure fake players can replenish'
   fakeplayer.config.replenish.chest:
@@ -120,7 +122,7 @@ permissions:
       - fakeplayer.command.tps
 
   fakeplayer.exp:
-    description: '所有关于经验值的命令权限'
+    description: 'All experience-related command permissions'
     children:
       - fakeplayer.command.expme
 
@@ -154,3 +156,4 @@ permissions:
       - fakeplayer.exp
       - fakeplayer.action
       - fakeplayer.cmd
+      - fakeplayer.command.stress

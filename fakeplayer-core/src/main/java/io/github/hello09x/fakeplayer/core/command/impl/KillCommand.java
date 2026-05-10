@@ -16,7 +16,6 @@ import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 public class KillCommand extends AbstractCommand {
 
     /**
-     * 移除假人
      */
     public void kill(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fakes = super.getFakeplayers(sender, args);

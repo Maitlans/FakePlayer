@@ -60,7 +60,6 @@ public class FakeplayerLifecycleListener implements Listener {
         }, 20);
     }
 
-    //K:假人UUID V:创建者名称
     private final Map<UUID, String> pendingFakeQuits = new ConcurrentHashMap<>();
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)

@@ -6,12 +6,10 @@ import java.util.LinkedList;
 public class NameSource {
 
     /**
-     * 接下来可以使用的名称序号
      */
     private final LinkedList<Integer> names;
 
     /**
-     * 容量
      */
     private int capacity;
 
@@ -28,9 +26,7 @@ public class NameSource {
     }
 
     /**
-     * 获取一个可使用的名称序号
      *
-     * @return 名称序号
      */
     public int pop() {
         if (names.isEmpty()) {
@@ -44,9 +40,7 @@ public class NameSource {
     }
 
     /**
-     * 归还一个名称序号
      *
-     * @param i 名称序号
      */
     public void push(int i) {
         if (i >= capacity) {

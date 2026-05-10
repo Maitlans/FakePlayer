@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 public class SleepCommand extends AbstractCommand {
 
     /**
-     * 睡觉
      */
     public void sleep(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = getFakeplayer(sender, args);
@@ -31,7 +30,6 @@ public class SleepCommand extends AbstractCommand {
     }
 
     /**
-     * 起床
      */
     public void wakeup(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var target = getFakeplayer(sender, args);

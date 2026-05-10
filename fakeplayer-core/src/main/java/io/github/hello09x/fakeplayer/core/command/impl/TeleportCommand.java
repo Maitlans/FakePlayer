@@ -16,7 +16,6 @@ import static net.kyori.adventure.text.format.NamedTextColor.RED;
 public class TeleportCommand extends AbstractCommand {
 
     /**
-     * 传送到假人
      */
     public void tp(@NotNull Player sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = getFakeplayer(sender, args);
@@ -24,7 +23,6 @@ public class TeleportCommand extends AbstractCommand {
     }
 
     /**
-     * 将假人传送过来
      */
     public void tphere(@NotNull Player sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = getFakeplayer(sender, args);
@@ -32,7 +30,6 @@ public class TeleportCommand extends AbstractCommand {
     }
 
     /**
-     * 与假人交换位置
      */
     public void tps(@NotNull Player sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = getFakeplayer(sender, args);

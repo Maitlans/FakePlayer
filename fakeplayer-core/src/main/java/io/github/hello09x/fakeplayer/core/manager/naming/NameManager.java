@@ -76,9 +76,7 @@ public class NameManager {
     }
 
     /**
-     * 通过名称生成 UUID
      *
-     * @param name 名称
      * @return UUID
      */
     private @NotNull UUID getUUIDFromName(@NotNull String name) {
@@ -89,7 +87,6 @@ public class NameManager {
             }
         }
 
-        // 老数据迁移
         {
             var base = serverId + ":" + name;
             var legacyUUID = UUID.nameUUIDFromBytes(base.getBytes(StandardCharsets.UTF_8));
@@ -100,7 +97,6 @@ public class NameManager {
             }
         }
 
-        // 新逻辑
         for (int i = 0; i < 10; i++) {
             var uuid = UUID.randomUUID();
             if (legacyUsedIdRepository.contains(uuid) || profileRepository.existsByUUID(uuid) || Bukkit.getOfflinePlayer(uuid).hasPlayedBefore()) {
@@ -114,10 +110,7 @@ public class NameManager {
     }
 
     /**
-     * 通过自定义名称获取序列名
      *
-     * @param name 自定义名称
-     * @return 序列名
      */
     public @NotNull SequenceName getSpecifiedName(@NotNull String name) {
         if (StringUtils.isNotBlank(config.getNamePrefix())) {
@@ -178,10 +171,7 @@ public class NameManager {
     }
 
     /**
-     * 获取一个序列名
      *
-     * @param creator 创建者
-     * @return 序列名
      */
     public @NotNull SequenceName getRegularName(@NotNull CommandSender creator) {
         var source = config.getNameTemplate();
@@ -225,19 +215,14 @@ public class NameManager {
     }
 
     /**
-     * 归还序列名
      *
-     * @param group    分组
-     * @param sequence 序列
      */
     public void unregister(@NotNull String group, int sequence) {
         Optional.ofNullable(nameSources.get(group)).ifPresent(ns -> ns.push(sequence));
     }
 
     /**
-     * 归还序列名
      *
-     * @param sn 序列名
      */
     public void unregister(@NotNull SequenceName sn) {
         this.unregister(sn.group(), sn.sequence());

@@ -61,7 +61,6 @@ public class FakeplayerSkinManager {
 
     public void useDefaultSkin(@NotNull CommandSender creator, @NotNull Player to) {
         if (!(creator instanceof Player p)) {
-            // 非玩家创建的假人只能采用在线皮肤
             if (config.isDefaultOnlineSkin()) {
                 this.useOnlineSkinAsync(to, Bukkit.getOfflinePlayer(to.getName()));
                 return;
@@ -69,7 +68,6 @@ public class FakeplayerSkinManager {
             return;
         }
 
-        // 使用以前配置过的
         var skin = repository.selectByCreatorIdAndPlayerId(p.getUniqueId(), to.getUniqueId());
         if (skin != null) {
             this.useOnlineSkinAsync(to, Bukkit.getOfflinePlayer(skin.targetId()));
@@ -77,10 +75,8 @@ public class FakeplayerSkinManager {
         }
 
         if (config.isDefaultOnlineSkin()) {
-            // 使用真实皮肤
             this.useOnlineSkinAsync(to, Bukkit.getOfflinePlayer(to.getName()));
         } else {
-            // 使用召唤者皮肤
             this.useSkin(to, p);
         }
     }

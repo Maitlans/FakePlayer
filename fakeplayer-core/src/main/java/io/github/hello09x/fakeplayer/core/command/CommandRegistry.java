@@ -80,6 +80,8 @@ public class CommandRegistry {
     private DebugCommand debugCommand;
     @Inject
     private StopCommand stopCommand;
+    @Inject
+    private StressCommand stressCommand;
 
     @Inject
     private FakeplayerConfig config;
@@ -93,7 +95,7 @@ public class CommandRegistry {
                 )
                 .withUsage(
                         "type fp ? for more information",
-                        "hello09x [汤姆]"
+                        "hello09x [Tom]"
                 )
                 .withPermission(Permission.spawn)
                 .withSubcommands(
@@ -432,6 +434,58 @@ public class CommandRegistry {
                                         new FakePlayerCommandArgument("command")
                                 )
                                 .executes(cmdCommand::cmd),
+
+                        command("stress")
+                                .withShortDescription("fakeplayer.command.stress.description")
+                                .withPermission(Permission.stress)
+                                .withRequirement(sender -> sender.isOp())
+                                .withSubcommands(
+                                        command("spawn")
+                                                .withArguments(int32("amount", 1))
+                                                .withOptionalArguments(text("profile"))
+                                                .executesPlayer(stressCommand::spawn),
+                                        command("spread")
+                                                .withArguments(float64("radius", 1.0D))
+                                                .withOptionalArguments(text("profile"))
+                                                .executesPlayer(stressCommand::spread),
+                                        command("randomwalk")
+                                                .withSubcommands(
+                                                        command("start")
+                                                                .withOptionalArguments(text("profile"))
+                                                                .executes(stressCommand::randomWalkStart),
+                                                        command("stop")
+                                                                .executes(stressCommand::randomWalkStop)
+                                                ),
+                                        command("mirror")
+                                                .withSubcommands(
+                                                        command("start")
+                                                                .withOptionalArguments(text("profile"))
+                                                                .executesPlayer(stressCommand::mirrorStart),
+                                                        command("stop")
+                                                                .executes(stressCommand::mirrorStop)
+                                                ),
+                                        command("action")
+                                                .withArguments(literals("action", List.of("use", "attack", "jump", "swap")))
+                                                .withOptionalArguments(text("profile"))
+                                                .executes(stressCommand::action),
+                                        command("hotbar")
+                                                .withSubcommands(
+                                                        command("slot")
+                                                                .withArguments(int32("slot", 1, 9))
+                                                                .executes(stressCommand::hotbarSlot),
+                                                        command("random")
+                                                                .withOptionalArguments(text("profile"))
+                                                                .executes(stressCommand::hotbarRandom),
+                                                        command("cycle")
+                                                                .withOptionalArguments(text("profile"))
+                                                                .executes(stressCommand::hotbarCycle)
+                                                ),
+                                        command("status")
+                                                .withShortDescription("fakeplayer.command.stress.status.description")
+                                                .executes(stressCommand::status),
+                                        command("stop")
+                                                .executes(stressCommand::stop)
+                                ),
 
                         command("killall")
                                 .withShortDescription("fakeplayer.command.killall.description")

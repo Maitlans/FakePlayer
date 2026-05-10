@@ -27,7 +27,6 @@ public class InvseeCommand extends AbstractCommand {
     }
 
     /**
-     * 查看背包
      */
     public void invsee(@NotNull Player sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = super.getFakeplayer(sender, args);

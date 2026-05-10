@@ -48,7 +48,6 @@ public class UsedIdRepository {
     }
 
     /**
-     * 从文件里读取使用过的 UUIDs
      */
     public void load() {
         var file = new File(Main.getInstance().getDataFolder(), "used-uuids.txt");
@@ -73,7 +72,6 @@ public class UsedIdRepository {
     }
 
     /**
-     * 将使用过的 UUIDs 写入文件
      */
     public void saveAll() {
         var folder = Main.getInstance().getDataFolder();

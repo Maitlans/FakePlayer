@@ -19,7 +19,6 @@ import java.util.Objects;
 public class RotationCommand extends AbstractCommand {
 
     /**
-     * 看向给定坐标
      */
     @SuppressWarnings("UnstableApiUsage")
     public void lookAt(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
@@ -29,7 +28,6 @@ public class RotationCommand extends AbstractCommand {
     }
 
     /**
-     * 看向给定方向
      */
     public CommandExecutor look(@NotNull Direction direction) {
         return (sender, args) -> {
@@ -48,7 +46,6 @@ public class RotationCommand extends AbstractCommand {
     }
 
     /**
-     * 看向给定方向
      */
     private void look(
             @NotNull Player fake,
@@ -65,7 +62,6 @@ public class RotationCommand extends AbstractCommand {
     }
 
     /**
-     * 看向指定方向
      */
     private void look(@NotNull Player fake, float yaw, float pitch) {
         var handle = bridge.fromPlayer(fake);
@@ -74,7 +70,6 @@ public class RotationCommand extends AbstractCommand {
     }
 
     /**
-     * 转向指定角度
      */
     public CommandExecutor turn(float yaw, float pitch) {
         return (sender, args) -> {
@@ -84,7 +79,6 @@ public class RotationCommand extends AbstractCommand {
     }
 
     /**
-     * 转向指定角度
      */
     public void turnTo(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = getFakeplayer(sender, args);
@@ -93,7 +87,6 @@ public class RotationCommand extends AbstractCommand {
     }
 
     /**
-     * 转向指定方向
      */
     private void turn(@NotNull Player fake, float yaw, float pitch) {
         var pos = fake.getLocation();

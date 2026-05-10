@@ -140,18 +140,15 @@ public class MineAction extends TraceAction {
     private static class Current {
 
         /**
-         * 当前左键的目标位置
          */
         @Nullable
         public BlockPos pos;
 
         /**
-         * 破坏方块的进度
          */
         public float progress;
 
         /**
-         * 冷却, 单位: tick
          */
         public int freeze;
 

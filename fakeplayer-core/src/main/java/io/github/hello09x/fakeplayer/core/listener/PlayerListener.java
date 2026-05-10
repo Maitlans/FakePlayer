@@ -21,7 +21,6 @@ public class PlayerListener implements Listener {
     }
 
     /**
-     * 玩家蹲伏时取消假人骑乘
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onSneak(@NotNull PlayerToggleSneakEvent event) {

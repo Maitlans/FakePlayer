@@ -38,139 +38,117 @@ public class FakeplayerConfig extends PluginConfig {
     private final static String defaultNameChars = "^[a-zA-Z0-9_]+$";
 
     /**
-     * 每位玩家最多多少个假人
      */
     private int playerLimit;
 
     /**
-     * 服务器最多多少个假人
      */
     private int serverLimit;
 
     /**
-     * 命名模版
      */
     private String nameTemplate;
 
     /**
-     * 假人名称前缀
      */
     private String namePrefix;
 
     /**
-     * 名称样式, 颜色
      */
     private NamedTextColor nameStyleColor;
 
     /**
-     * 名称样式, 格式
      */
     private List<TextDecoration> nameStyleDecorations;
 
     /**
-     * 创建者玩家下线时是否跟随下线
      */
     private boolean followQuiting;
     private boolean followQuitingForce;
     private Integer followQuitingForceDelay;
 
     /**
-     * 是否探测 IP
      */
     private boolean detectIp;
 
     /**
-     * 服务器 tps 低于这个值移除所有假人
      */
     private int kaleTps;
 
     /**
-     * 创建前执行命令
      */
     private List<String> preSpawnCommands;
 
     /**
-     * 创建时执行命令
      */
     private List<String> postSpawnCommands;
 
     /**
-     * 创建后执行命令
      */
     private List<String> afterSpawnCommands;
 
     /**
-     * 退出前执行命令
      */
     private List<String> postQuitCommands;
 
     /**
-     * 退出后命令
      */
     private List<String> afterQuitCommands;
 
     /**
-     * 自执行命令
      */
     private List<String> selfCommands;
 
     /**
-     * 退出时是否丢弃背包物品
      */
     private boolean dropInventoryOnQuiting;
 
     /**
-     * 是否保存假人存档
      */
     private boolean persistData;
 
     /**
-     * 死亡时是否踢出游戏
      */
     private boolean kickOnDead;
 
+    private boolean autoRespawnOnDeath;
+
     /**
-     * 自定义名称规则
      */
     private Pattern namePattern;
 
     /**
-     * 检测更新
      */
     private boolean checkForUpdates;
 
     /**
-     * 允许执行的命令
      */
     @Deprecated
     private Set<String> allowCommands;
 
     /**
-     * 默认假人存活时间
      */
     @Nullable
     private Duration lifespan;
 
     /**
-     * 开发者调试模式
      */
     private boolean debug;
 
     /**
-     * 防止踢出
      */
     private PreventKicking preventKicking;
 
     /**
-     * invsee 实现方式
      */
     private InvseeImplement invseeImplement;
 
     /**
-     * 真实皮肤
      */
     @Beta
     private boolean defaultOnlineSkin;
+
+    private StressConfig stress;
 
     private Map<Feature, String> defaultFeatures;
 
@@ -201,7 +179,8 @@ public class FakeplayerConfig extends PluginConfig {
         this.nameTemplate = file.getString("name-template", "");
         this.dropInventoryOnQuiting = file.getBoolean("drop-inventory-on-quiting", true);
         this.persistData = file.getBoolean("persist-data", true);
-        this.kickOnDead = file.getBoolean("kick-on-dead", true);
+        this.kickOnDead = file.getBoolean("kick-on-dead", false);
+        this.autoRespawnOnDeath = file.getBoolean("auto-respawn-on-death", true);
         this.checkForUpdates = file.getBoolean("check-for-updates", true);
         this.namePattern = getNamePattern(file);
         this.preventKicking = this.getPreventKicking(file);
@@ -215,6 +194,7 @@ public class FakeplayerConfig extends PluginConfig {
                                  .collect(Collectors.toSet());
 
         this.defaultOnlineSkin = file.getBoolean("default-online-skin", false);
+        this.stress = StressConfig.load(file.getConfigurationSection("stress"));
         this.defaultFeatures = Arrays.stream(Feature.values())
                                      .collect(Collectors.toMap(Function.identity(), key -> file.getString("default-features." + key.name(), key.getDefaultOption())));
         this.invseeImplement = ConfigUtils.getEnum(file, "invsee-implement", InvseeImplement.class, InvseeImplement.AUTO);

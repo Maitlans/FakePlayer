@@ -21,7 +21,6 @@ import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 public class RideCommand extends AbstractCommand {
 
     /**
-     * 骑最近的实体
      */
     public void rideAnything(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = getFakeplayer(sender, args);
@@ -37,7 +36,6 @@ public class RideCommand extends AbstractCommand {
     }
 
     /**
-     * 骑目标实体
      */
     public void rideTarget(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = getFakeplayer(sender, args);
@@ -72,7 +70,6 @@ public class RideCommand extends AbstractCommand {
     }
 
     /**
-     * 骑正常可以骑的附近实体
      */
     public void rideVehicle(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = getFakeplayer(sender, args);
@@ -90,7 +87,6 @@ public class RideCommand extends AbstractCommand {
     }
 
     /**
-     * 骑创建者
      */
     public void rideMe(@NotNull Player sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = getFakeplayer(sender, args);
@@ -106,7 +102,6 @@ public class RideCommand extends AbstractCommand {
     }
 
     /**
-     * 停止骑行
      */
     public void stopRiding(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         bridge.fromPlayer(getFakeplayer(sender, args)).stopRiding();

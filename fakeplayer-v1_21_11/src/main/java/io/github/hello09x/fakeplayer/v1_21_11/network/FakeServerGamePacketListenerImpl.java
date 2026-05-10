@@ -63,7 +63,6 @@ public class FakeServerGamePacketListenerImpl extends ServerGamePacketListenerIm
     }
 
     /**
-     * 玩家被击退的动作由客户端完成, 假人没有客户端因此手动完成这个动作
      */
     public void handleClientboundSetEntityMotionPacket(@NotNull ClientboundSetEntityMotionPacket packet) {
         if (packet.getId() == this.player.getId() && this.player.hurtMarked) {

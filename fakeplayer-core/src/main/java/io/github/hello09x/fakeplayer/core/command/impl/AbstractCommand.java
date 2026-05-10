@@ -41,19 +41,9 @@ public abstract class AbstractCommand {
     }
 
     /**
-     * 获取命令指定的假人
      * <ol>
-     *     <li>如果玩家指定了名称, 则返回对应的假人</li>
-     *     <li>如果玩家通过 /fp select 选择了假人, 则返回该假人</li>
-     *     <li>如果玩家仅有一个假人, 则返回该假人</li>
-     *     <li>不能找到唯一的一个假人时, 返回错误给玩家</li>
      * </ol>
      *
-     * @param sender    命令发送方
-     * @param args      命令参数
-     * @param predicate 过滤条件
-     * @return 假人
-     * @throws WrapperCommandSyntaxException 找不到唯一的假人时抛出次异常
      */
     protected @NotNull Player getFakeplayer(@NotNull CommandSender sender, @NotNull CommandArguments args, @Nullable Predicate<Player> predicate) throws WrapperCommandSyntaxException {
         var fake = (Player) args.get("name");
@@ -97,7 +87,6 @@ public abstract class AbstractCommand {
         @SuppressWarnings("unchecked")
         var players = (List<Player>) args.get("names");
 
-        // 优先选中的假人
         if (players == null || players.isEmpty()) {
             var fake = manager.getSelection(sender);
             if (fake != null) {
@@ -105,7 +94,6 @@ public abstract class AbstractCommand {
             }
         }
 
-        // 查找唯一假人
         if (players == null || players.isEmpty()) {
             var fakeplayers = manager.getAll(sender);
             return switch (fakeplayers.size()) {

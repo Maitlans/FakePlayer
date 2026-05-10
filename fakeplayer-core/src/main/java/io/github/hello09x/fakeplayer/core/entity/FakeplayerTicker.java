@@ -15,13 +15,10 @@ public class FakeplayerTicker extends BukkitRunnable {
     private final Fakeplayer player;
 
     /**
-     * 移除时间
-     * <p>如果不需要定时移除则为 0</p>
      */
     private final long removeAt;
 
     /**
-     * 是否是第一次 tick
      */
     private boolean firstTick;
 
@@ -47,10 +44,6 @@ public class FakeplayerTicker extends BukkitRunnable {
             return;
         }
 
-        // 真实的玩家是通过 ServerGamePacketListenerImpl#tick() 进行时刻运算的
-        // 这个方法会修复第一次 tick 坐标错误的问题
-        // 但是这个方法会导致强制修正坐标为客户端坐标, 然而假人的连接并不会发送任何坐标
-        // 因此这里自行修复第一次 tick 的坐标, 并直接调用 ServerPlayer#doTick() 来进行时刻运算
         if (this.firstTick) {
             this.doFirstTick();
         } else {
@@ -59,9 +52,6 @@ public class FakeplayerTicker extends BukkitRunnable {
     }
 
     /**
-     * 处理第一次 tick
-     * <p>在这里在 {@link NMSServerPlayer#doTick()} 之后, 强行设置一次坐标解决被其他插件干预导致随机传送</p>
-     * <p>似乎是 clearfog 或者 multiverse 插件导致的</p>
      */
     private void doFirstTick() {
         var handle = this.player.getHandle();
@@ -70,14 +60,12 @@ public class FakeplayerTicker extends BukkitRunnable {
         var y = handle.getY();
         var z = handle.getZ();
 
-        // 将本 tick 的移动取消
         handle.setXo(x);
         handle.setYo(y);
         handle.setZo(z);
 
         handle.doTick();
 
-        // clearFog 插件会在第一次传送的时候改变了玩家的位置, 因此必须进行一次传送
         player.teleport(new Location(player.getWorld(), x, y, z, player.getLocation().getYaw(), player.getLocation().getPitch()));
         handle.absMoveTo(x, y, z, player.getLocation().getYaw(), player.getLocation().getPitch());
         this.firstTick = false;

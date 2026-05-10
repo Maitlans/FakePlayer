@@ -20,11 +20,15 @@ public class AttackAction extends TraceAction {
     public boolean tick() {
         var hit = this.getTarget();
         if (hit == null) {
-            return false;
+            player.swing(InteractionHand.MAIN_HAND);
+            player.resetLastActionTime();
+            return true;
         }
 
         if (hit.getType() != HitResult.Type.ENTITY) {
-            return false;
+            player.swing(InteractionHand.MAIN_HAND);
+            player.resetLastActionTime();
+            return true;
         }
 
         var entityHit = (EntityHitResult) hit;

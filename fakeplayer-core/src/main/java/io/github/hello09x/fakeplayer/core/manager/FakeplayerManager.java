@@ -72,7 +72,6 @@ public class FakeplayerManager {
         this.lagMonitor = Executors.newSingleThreadScheduledExecutor();
         this.lagMonitor.scheduleWithFixedDelay(() -> {
                                                 //Detects TPS performance from the past 1 minute only
-                                                //将服务器卡顿检测范围缩小到过去一分钟，以配合新功能获得更及时的反应
                                                    if (Bukkit.getServer().getTPS()[0] < config.getKaleTps()) {
                                                        Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
                                                            laglevel=min(laglevel+1,this.config.getPlayerLimit());
@@ -83,19 +82,16 @@ public class FakeplayerManager {
                                                                if(fakeplayerlist.size()>this.config.getPlayerLimit()-laglevel){
                                                                    for (int i = fakeplayerlist.size() - 1; i >= this.config.getPlayerLimit()-laglevel; i--) {
                                                                        //Remove fakeplayers in reverse order of summoning
-                                                                       //如果玩家召唤的假人数量超出降低后的上限，则按照反序移除假人
                                                                        remove(fakeplayerlist.get(i).getName(),"Server lag");
                                                                    }
                                                                }
                                                            }
                                                            //Lacking translation key for now
-                                                           //暂时没有写翻译条目，先用英文播报
                                                            Bukkit.broadcast(Component.text("Server lag! Current fakeplayer limits: ").color(GOLD).append(Component.text(this.config.getPlayerLimit()-laglevel).color(RED)));
                                                        });
                                                    }
                                                    else {
                                                        //Restore fakeplayer limits, one at a time
-                                                       //如果卡顿恢复，则每周期恢复1个假人上限
                                                        if(laglevel>0)Bukkit.broadcast(Component.text("Fakeplayer restrictions removed! Current limits: ").color(GREEN).append(Component.text(this.config.getPlayerLimit()-laglevel+1).color(AQUA)));
                                                        laglevel=max(laglevel-1,0);
                                                    }
@@ -104,10 +100,7 @@ public class FakeplayerManager {
     }
 
     /**
-     * 创建一个假人
      *
-     * @param creator 创建者
-     * @param spawnAt 生成地点
      */
     public @NotNull CompletableFuture<Player> spawnAsync(
             @NotNull CommandSender creator,
@@ -127,7 +120,7 @@ public class FakeplayerManager {
                 lifespan
         );
 
-        var target = fp.getPlayer();    // 即使出现异常也不需要处理这个玩家, 最终会被 GC 掉
+        var target = fp.getPlayer();
         this.playerList.add(fp);
 
         this.dispatchCommandsEarly(fp, this.config.getPreSpawnCommands());
@@ -151,11 +144,7 @@ public class FakeplayerManager {
     }
 
     /**
-     * 获取一个假人
      *
-     * @param creator 创建者
-     * @param name    假人名称
-     * @return 假人
      */
     public @Nullable Player get(@NotNull CommandSender creator, @NotNull String name) {
         return Optional
@@ -166,10 +155,7 @@ public class FakeplayerManager {
     }
 
     /**
-     * 根据名称获取假人
      *
-     * @param name 名称
-     * @return 假人
      */
     public @Nullable Player get(@NotNull String name) {
         return Optional
@@ -179,10 +165,7 @@ public class FakeplayerManager {
     }
 
     /**
-     * 获取一个假人的创建者, 如果这个玩家不是假人, 则为 {@code null}
      *
-     * @param target 假人
-     * @return 假人的创建者
      */
     public @Nullable String getCreatorName(@NotNull Player target) {
         return Optional
@@ -193,10 +176,7 @@ public class FakeplayerManager {
     }
 
     /**
-     * 获取假人的创建者
      *
-     * @param target 假人
-     * @return 创建者
      */
     public @Nullable CommandSender getCreator(@NotNull Player target) {
         return Optional.ofNullable(this.playerList.getByUUID(target.getUniqueId()))
@@ -212,22 +192,14 @@ public class FakeplayerManager {
     }
 
     /**
-     * 根据名称删除假人
      *
-     * @param name   名称
-     * @param reason 原因
-     * @return 是否删除成功
      */
     public boolean remove(@NotNull String name, @Nullable String reason) {
         return this.remove(name, reason == null ? null : text(reason));
     }
 
     /**
-     * 根据名称删除假人
      *
-     * @param name   名称
-     * @param reason 原因
-     * @return 是否移除成功
      */
     public boolean remove(@NotNull String name, @Nullable Component reason) {
         var target = this.get(name);
@@ -243,9 +215,7 @@ public class FakeplayerManager {
     }
 
     /**
-     * 移除所有假人
      *
-     * @return 移除的假人数量
      */
     public int removeAll(@Nullable String reason) {
         var targets = getAll();
@@ -256,15 +226,12 @@ public class FakeplayerManager {
     }
 
     /**
-     * @return 获取所有假人
      */
     public @NotNull List<Player> getAll() {
         return this.getAll((Predicate<Player>) null);
     }
 
     /**
-     * @param predicate 筛选条件
-     * @return 经过筛选的假人
      */
     public @NotNull List<Player> getAll(@Nullable Predicate<Player> predicate) {
         var stream = this.playerList.getAll().stream().map(Fakeplayer::getPlayer);
@@ -275,9 +242,7 @@ public class FakeplayerManager {
     }
 
     /**
-     * 清理假人
      *
-     * @param target 假人
      */
     public void cleanup(@NotNull Player target) {
         var fakeplayer = this.playerList.removeByUUID(target.getUniqueId());
@@ -295,21 +260,14 @@ public class FakeplayerManager {
     }
 
     /**
-     * 获取创建者创建的所有假人
      *
-     * @param creator 创建者
-     * @return 创建者创建的假人
      */
     public @NotNull List<Player> getAll(@NotNull CommandSender creator) {
         return this.getAll(creator, null);
     }
 
     /**
-     * 获取筛选过的创建者创建的假人
      *
-     * @param creator   创建者
-     * @param predicate 筛选条件
-     * @return 假人
      */
     public @NotNull List<Player> getAll(@NotNull CommandSender creator, @Nullable Predicate<Player> predicate) {
         var stream = this.playerList.getByCreator(creator.getName()).stream().map(Fakeplayer::getPlayer);
@@ -324,30 +282,21 @@ public class FakeplayerManager {
     }
 
     /**
-     * 判断一名玩家是否是假人
      *
-     * @param target 玩家
-     * @return 是否是假人
      */
     public boolean isFake(@NotNull Player target) {
         return this.playerList.getByUUID(target.getUniqueId()) != null;
     }
 
     /**
-     * 判断一名玩家不是假人
      *
-     * @param target 玩家
-     * @return 是否不是假人
      */
     public boolean isNotFake(@NotNull Player target) {
         return this.playerList.getByUUID(target.getUniqueId()) == null;
     }
 
     /**
-     * 获取 IP 地址创建着多少个假人
      *
-     * @param address IP 地址
-     * @return 该 IP 地址创建着多少个假人
      */
     public long countByAddress(@NotNull String address) {
         return this.playerList
@@ -357,20 +306,14 @@ public class FakeplayerManager {
     }
 
     /**
-     * 获取这个玩家创建了多少个假人
      *
-     * @param creator 玩家
-     * @return 创建了多少个假人
      */
     public int countByCreator(@NotNull CommandSender creator) {
         return this.playerList.countByCreator(creator.getName());
     }
 
     /**
-     * 设置玩家当前选择的假人
      *
-     * @param creator 玩家
-     * @param target  假人
      */
     public void setSelection(@NotNull Player creator, @Nullable Player target) {
         if (target == null) {
@@ -386,10 +329,7 @@ public class FakeplayerManager {
     }
 
     /**
-     * 获取当前选中的假人
      *
-     * @param creator 创建者
-     * @return 选中的假人
      */
     public @Nullable Player getSelection(@NotNull CommandSender creator) {
         if (!(creator instanceof Player p)) {
@@ -417,10 +357,7 @@ public class FakeplayerManager {
     }
 
     /**
-     * 以假人身份执行命令
      *
-     * @param target   假人
-     * @param commands 命令
      */
     public void issueCommands(@NotNull Player target, @NotNull List<String> commands) {
         if (commands.isEmpty()) {
@@ -462,10 +399,7 @@ public class FakeplayerManager {
     }
 
     /**
-     * 以控制台身份对玩家执行命令
      *
-     * @param args   参数
-     * @param commands 命令
      */
     public void dispatchCommands(@NotNull DispatchCommandArgs args, @NotNull List<String> commands) {
         if (commands.isEmpty()) {
@@ -488,10 +422,7 @@ public class FakeplayerManager {
     }
 
     /**
-     * 以控制台身份对玩家执行命令
      *
-     * @param player   假人
-     * @param commands 命令
      */
     public void dispatchCommands(@NotNull Player player, @NotNull List<String> commands) {
         this.dispatchCommands(new DispatchCommandArgs(player.getName(),player.getUniqueId().toString(),Objects.requireNonNull(this.getCreatorName(player))),commands);
@@ -503,9 +434,7 @@ public class FakeplayerManager {
     }
 
     /**
-     * 检测限制, 不满足条件则抛出异常
      *
-     * @param creator 创建者
      */
     private void checkLimit(@NotNull CommandSender creator) throws CommandException {
         if (creator.isOp()) {
@@ -517,7 +446,6 @@ public class FakeplayerManager {
         }
 
         //Apply dynamic limits to fakeplayers
-        //对玩家创建假人上限判断应用新的计算规则
         if (this.playerList.getByCreator(creator.getName()).size() >= this.config.getPlayerLimit()-laglevel) {
             throw new CommandException(translatable("fakeplayer.command.spawn.error.player-limit"));
         }

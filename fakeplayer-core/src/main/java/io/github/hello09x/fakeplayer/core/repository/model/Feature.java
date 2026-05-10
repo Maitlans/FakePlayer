@@ -27,7 +27,6 @@ import java.util.function.Function;
 public enum Feature implements Translatable, Singletons {
 
     /**
-     * 是否具有碰撞箱
      */
     collidable(
             "fakeplayer.config.collidable",
@@ -39,7 +38,6 @@ public enum Feature implements Translatable, Singletons {
     ),
 
     /**
-     * 是否无敌
      */
     invulnerable(
             "fakeplayer.config.invulnerable",
@@ -51,7 +49,6 @@ public enum Feature implements Translatable, Singletons {
     ),
 
     /**
-     * 金刚狼模式 -> 超强的再生能力
      */
     wolverine(
             "fakeplayer.config.wolverine",
@@ -69,7 +66,6 @@ public enum Feature implements Translatable, Singletons {
     ),
 
     /**
-     * 是否自动看向实体
      */
     look_at_entity(
             "fakeplayer.config.look_at_entity",
@@ -87,7 +83,6 @@ public enum Feature implements Translatable, Singletons {
     ),
 
     /**
-     * 是否能够拾取物品
      */
     pickup_items(
             "fakeplayer.config.pickup_items",
@@ -99,7 +94,6 @@ public enum Feature implements Translatable, Singletons {
     ),
 
     /**
-     * 是否使用皮肤
      */
     skin(
             "fakeplayer.config.skin",
@@ -111,7 +105,6 @@ public enum Feature implements Translatable, Singletons {
     ),
 
     /**
-     * 是否自动补货
      */
     replenish(
             "fakeplayer.config.replenish",
@@ -123,7 +116,6 @@ public enum Feature implements Translatable, Singletons {
     ),
 
     /**
-     * 是否自动钓鱼
      */
     autofish(
             "fakeplayer.config.autofish",

@@ -39,8 +39,29 @@ public class ActionManager {
     ) {
         return Optional.ofNullable(this.managers.get(player.getUniqueId()))
                        .map(manager -> manager.get(action))
-                       .filter(ac -> ac.getSetting().remains > 0)
+                       .filter(this::isActive)
                        .isPresent();
+    }
+
+    public int countActiveAction(@NotNull ActionType action) {
+        var count = 0;
+        for (var manager : this.managers.values()) {
+            var ticker = manager.get(action);
+            if (ticker != null && isActive(ticker)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean stopAction(@NotNull Player player, @NotNull ActionType action) {
+        var managers = this.managers.get(player.getUniqueId());
+        if (managers == null || !managers.containsKey(action)) {
+            return false;
+        }
+
+        managers.put(action, bridge.createAction(player, action, ActionSetting.stop()));
+        return true;
     }
 
     public @NotNull @Unmodifiable Set<ActionType> getActiveActions(@NotNull Player player) {
@@ -51,10 +72,7 @@ public class ActionManager {
 
         return manager.entrySet()
                       .stream()
-                      .filter(action -> {
-                          int remains = action.getValue().getSetting().remains;
-                          return remains > 0 || remains == -1;
-                      })
+                      .filter(action -> isActive(action.getValue()))
                       .map(Map.Entry::getKey)
                       .collect(Collectors.toSet());
     }
@@ -88,7 +106,6 @@ public class ActionManager {
             var player = Bukkit.getPlayer(entry.getKey());
 
             if (player == null || !player.isValid()) {
-                // 假人下线或者死亡
                 itr.remove();
                 for (var ticker : entry.getValue().values()) {
                     ticker.stop();
@@ -109,6 +126,11 @@ public class ActionManager {
                 itr.remove();
             }
         }
+    }
+
+    private boolean isActive(@NotNull ActionTicker ticker) {
+        int remains = ticker.getSetting().remains;
+        return remains > 0 || remains == -1;
     }
 
 }

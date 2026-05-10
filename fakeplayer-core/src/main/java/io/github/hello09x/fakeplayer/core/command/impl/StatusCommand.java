@@ -50,7 +50,6 @@ public class StatusCommand extends AbstractCommand {
     }
 
     /**
-     * 查看假人状态
      */
     public void status(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = super.getFakeplayer(sender, args);

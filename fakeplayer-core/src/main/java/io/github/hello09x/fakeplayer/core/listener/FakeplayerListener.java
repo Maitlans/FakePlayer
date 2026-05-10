@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import io.github.hello09x.devtools.core.utils.ComponentUtils;
 import io.github.hello09x.devtools.core.utils.Exceptions;
 import io.github.hello09x.devtools.core.utils.MetadataUtils;
+import io.github.hello09x.fakeplayer.api.spi.NMSBridge;
 import io.github.hello09x.fakeplayer.core.Main;
 import io.github.hello09x.fakeplayer.core.config.FakeplayerConfig;
 import io.github.hello09x.fakeplayer.core.constant.MetadataKeys;
@@ -44,17 +45,18 @@ public class FakeplayerListener implements Listener {
     private final UsedIdRepository usedIdRepository;
     private final FakeplayerProfileRepository profileRepository;
     private final FakeplayerConfig config;
+    private final NMSBridge bridge;
 
     @Inject
-    public FakeplayerListener(FakeplayerManager manager, UsedIdRepository usedIdRepository, FakeplayerProfileRepository profileRepository, FakeplayerConfig config) {
+    public FakeplayerListener(FakeplayerManager manager, UsedIdRepository usedIdRepository, FakeplayerProfileRepository profileRepository, FakeplayerConfig config, NMSBridge bridge) {
         this.manager = manager;
         this.usedIdRepository = usedIdRepository;
         this.profileRepository = profileRepository;
         this.config = config;
+        this.bridge = bridge;
     }
 
     /**
-     * 拒绝真实玩家使用假人用过的 ID 登陆
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void disallowUsedUUIDLogin(@NotNull PlayerLoginEvent event) {
@@ -114,12 +116,19 @@ public class FakeplayerListener implements Listener {
     }
 
     /**
-     * 死亡退出游戏
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void kickOrNotifyOnDead(@NotNull PlayerDeathEvent event) {
         var player = event.getPlayer();
         if (manager.isNotFake(player)) {
+            return;
+        }
+        if (config.isAutoRespawnOnDeath()) {
+            Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+                if (player.isOnline() && player.isDead()) {
+                    bridge.fromPlayer(player).respawn();
+                }
+            });
             return;
         }
         if (!config.isKickOnDead()) {
@@ -134,8 +143,6 @@ public class FakeplayerListener implements Listener {
             return;
         }
 
-        // 有一些跨服同步插件会退出时同步生命值, 假人重新生成的时候同步为 0
-        // 因此在死亡时将生命值设置恢复满血先
         Optional.ofNullable(player.getAttribute(Attribute.MAX_HEALTH))
                 .map(AttributeInstance::getValue)
                 .ifPresent(player::setHealth);
@@ -144,7 +151,6 @@ public class FakeplayerListener implements Listener {
     }
 
     /**
-     * 退出游戏掉落背包
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void cleanup(@NotNull PlayerQuitEvent event) {
@@ -155,7 +161,7 @@ public class FakeplayerListener implements Listener {
 
         try {
             if (manager.getCreator(target) instanceof Player creator && manager.countByCreator(creator) == 1) {
-                Bukkit.getScheduler().runTaskLater(Main.getInstance(), creator::updateCommands, 1); // 需要下 1 tick 移除后才正确刷新
+                Bukkit.getScheduler().runTaskLater(Main.getInstance(), creator::updateCommands, 1);
             }
         } finally {
             manager.cleanup(target);

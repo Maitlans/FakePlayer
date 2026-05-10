@@ -70,7 +70,7 @@ public abstract class AbstractInvseeManager implements InvseeManager {
     public void fixDragInventory(@NotNull InventoryDragEvent event) {
         var top = event.getView().getTopInventory();
         if (top.getType() == InventoryType.PLAYER && top.getHolder() instanceof Player whom && manager.isFake(whom)) {
-            if (event.getNewItems().keySet().stream().anyMatch(slot -> slot > 35)) {    // > 35 表示从假人背包拖动到玩家背包, 这种操作会出现问题
+            if (event.getNewItems().keySet().stream().anyMatch(slot -> slot > 35)) {
                 event.setCancelled(true);
             }
         }

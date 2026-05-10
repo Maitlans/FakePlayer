@@ -1,7 +1,5 @@
 package io.github.hello09x.fakeplayer.v1_21_11.network;
 
-import io.github.hello09x.fakeplayer.core.Main;
-import io.github.hello09x.fakeplayer.core.manager.FakeplayerManager;
 import io.github.hello09x.fakeplayer.core.network.FakeChannel;
 import io.netty.channel.ChannelFutureListener;
 import net.minecraft.network.Connection;
@@ -11,12 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
-import java.util.logging.Logger;
 
 public class FakeConnection extends Connection {
-
-    private final static Logger log = Main.getInstance().getLogger();
-    private final FakeplayerManager manager = Main.getInjector().getInstance(FakeplayerManager.class);
 
     public FakeConnection(@NotNull InetAddress address) {
         super(PacketFlow.SERVERBOUND);
@@ -27,22 +21,34 @@ public class FakeConnection extends Connection {
 
     @Override
     public boolean isConnected() {
-        return true;
+        return super.isConnected();
     }
 
     @Override
     public void send(Packet<?> packet, @Nullable ChannelFutureListener channelfuturelistener) {
+        this.handleSendListener(channelfuturelistener);
     }
 
     @Override
     public void send(Packet<?> packet, @Nullable ChannelFutureListener channelfuturelistener, boolean flag) {
+        this.handleSendListener(channelfuturelistener);
     }
-
-
 
     @Override
     public void send(Packet<?> packet) {
 
+    }
+
+    private void handleSendListener(@Nullable ChannelFutureListener listener) {
+        if (listener == null) {
+            return;
+        }
+
+        try {
+            listener.operationComplete(this.channel.newSucceededFuture());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

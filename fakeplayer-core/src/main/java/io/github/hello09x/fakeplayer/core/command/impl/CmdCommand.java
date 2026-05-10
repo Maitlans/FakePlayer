@@ -24,7 +24,6 @@ public class CmdCommand extends AbstractCommand {
     private final Logger log = Main.getInstance().getLogger();
 
     /**
-     * 假人执行命令
      */
     public void cmd(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = super.getFakeplayer(sender, args);

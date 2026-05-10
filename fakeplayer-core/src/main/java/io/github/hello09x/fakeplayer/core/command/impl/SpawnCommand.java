@@ -44,7 +44,6 @@ public class SpawnCommand extends AbstractCommand {
     }
 
     /**
-     * 创建假人
      */
     @HandleCommandException
     public void spawn(@NotNull CommandSender sender, @NotNull CommandArguments args) {
@@ -93,7 +92,6 @@ public class SpawnCommand extends AbstractCommand {
                    scheduler.runTask(Main.getInstance(), () -> {
                        sender.sendMessage(message);
                        if (sender instanceof Player p && manager.countByCreator(sender) == 1) {
-                           // 有些命令在有假人的时候才会显示, 因此需要强制刷新一下
                            p.updateCommands();
                        }
                    });

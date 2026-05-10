@@ -4,6 +4,8 @@ import io.github.hello09x.fakeplayer.api.spi.NMSNetwork;
 import io.github.hello09x.fakeplayer.api.spi.NMSServerGamePacketListener;
 import io.github.hello09x.fakeplayer.v1_21_11.network.FakeConnection;
 import io.github.hello09x.fakeplayer.v1_21_11.network.FakeServerGamePacketListenerImpl;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.protocol.game.GameProtocols;
 import net.minecraft.server.network.CommonListenerCookie;
 import org.bukkit.Server;
 import org.bukkit.craftbukkit.v1_21_R7.CraftServer;
@@ -48,6 +50,13 @@ public class NMSNetworkImpl implements NMSNetwork {
                 cookie
         );
         this.serverGamePacketListener = listener;
+        this.connection.setupInboundProtocol(
+                GameProtocols.SERVERBOUND_TEMPLATE.bind(
+                        RegistryFriendlyByteBuf.decorator(((CraftServer) server).getServer().registryAccess()),
+                        listener
+                ),
+                listener
+        );
         handle.connection = listener;
         return listener;
     }

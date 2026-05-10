@@ -36,7 +36,6 @@ public class ConfigCommand extends AbstractCommand {
     }
 
     /**
-     * 设置配置
      */
     public void setConfig(@NotNull Player sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var feature = (Feature) Objects.requireNonNull(args.get("feature"));
@@ -57,7 +56,6 @@ public class ConfigCommand extends AbstractCommand {
     }
 
     /**
-     * 获取所有配置
      */
     public void listConfig(@NotNull Player sender, @NotNull CommandArguments args) {
         CompletableFuture.runAsync(() -> {

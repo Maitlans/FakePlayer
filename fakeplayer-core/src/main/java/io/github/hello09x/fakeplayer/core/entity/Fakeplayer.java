@@ -85,10 +85,6 @@ public class Fakeplayer {
     private NMSNetwork network;
 
     /**
-     * @param creator      创建者
-     * @param creatorIp    创建者 IP
-     * @param sequenceName 序列名
-     * @param lifespan     存活时间
      */
     public Fakeplayer(
             @NotNull CommandSender creator,
@@ -108,12 +104,11 @@ public class Fakeplayer {
         this.ticker = new FakeplayerTicker(this, lifespan);
         this.player.setPersistent(config.isPersistData());
         this.player.setSleepingIgnored(true);
-        this.handle.setPlayBefore(); // 可避免一些插件的第一次入服欢迎信息
-        this.handle.disableAdvancements(Main.getInstance()); // 不提示成就信息
+        this.handle.setPlayBefore();
+        this.handle.disableAdvancements(Main.getInstance());
     }
 
     /**
-     * 让假人诞生
      */
     public CompletableFuture<Void> spawnAsync(@NotNull SpawnOption option) {
         var address = ipGen.next();
@@ -142,9 +137,6 @@ public class Fakeplayer {
                     }
 
                     if (config.isDropInventoryOnQuiting()) {
-                        // 跨服背包同步插件可能导致假人既丢弃了一份到地上，在重新生成的时候又回来了
-                        // 因此在生成的时候清空一次背包
-                        // 但无法解决登陆后延迟同步背包的情况
                         this.player.getInventory().clear();
                     }
 
@@ -168,10 +160,10 @@ public class Fakeplayer {
                     this.network.placeNewPlayer(Bukkit.getServer(), this.player);
                     this.player.setHealth(Optional.ofNullable(this.player.getAttribute(Attributes.maxHealth()))
                                                   .map(AttributeInstance::getValue)
-                                                  .orElse(20D));    // 恢复生命值
+                                                  .orElse(20D));
                     this.player.setFoodLevel(20);
                     this.setupName();
-                    this.handle.setupClientOptions();   // 处理皮肤设置问题
+                    this.handle.setupClientOptions();
 
                     this.teleportToSpawnpoint(option.spawnAt().clone());
                     this.ticker.runTaskTimer(Main.getInstance(), 0, 1);
@@ -179,14 +171,11 @@ public class Fakeplayer {
     }
 
     /**
-     * 将假人传送到指定位置
      *
-     * @param to 目标位置
      */
     private void teleportToSpawnpoint(@NotNull Location to) {
         var from = this.player.getLocation();
         if (from.getWorld().equals(to.getWorld())) {
-            // 如果生成世界等于目的世界, 则需要穿越一次维度才能获取刷怪能力
             var otherWorld = WorldUtils.getOtherWorld(from.getWorld());
             if (otherWorld == null || !player.teleport(otherWorld.getSpawnLocation())) {
                 this.creator.sendMessage(translatableWithPrefix(
@@ -235,11 +224,7 @@ public class Fakeplayer {
     }
 
     /**
-     * 判断是否是创建者
-     * <p>如果玩家下线再重新登陆, entityID 将会不一样导致 {@link Object#equals(Object)} 返回 {@code false}</p>
      *
-     * @param sender 命令执行者
-     * @return 是否是创建者
      */
     public boolean isCreatedBy(@NotNull CommandSender sender) {
         if (this.creator instanceof Player pc && sender instanceof Player ps) {

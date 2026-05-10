@@ -36,7 +36,6 @@ public class SkinCommand extends AbstractCommand {
     }
 
     /**
-     * 复制皮肤
      */
     public void skin(@NotNull CommandSender sender, @NotNull CommandArguments args) throws WrapperCommandSyntaxException {
         var fake = getFakeplayer(sender, args);
@@ -47,7 +46,6 @@ public class SkinCommand extends AbstractCommand {
             return;
         }
 
-        // 限制请求数, 防止 mojang api 限流
         if (!sender.isOp() && spams.computeIfAbsent(sender, k -> new MutableInt()).getValue() != 0) {
             sender.sendMessage(translatableWithPrefix("fakeplayer.command.skin.error.too-many-operations", RED));
             return;

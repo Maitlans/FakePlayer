@@ -1,5 +1,39 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+* add Minecraft/Paper/Spigot 1.21.11 build support for the fakeplayer runtime module
+* add OP-only `/fp stress` command namespace for bulk fakeplayer stress testing
+* add `/fp stress spawn <amount> [profile]` for batched fakeplayer spawning using the operator's name pattern
+* add `/fp stress spread <radius> [profile]` to scatter all fakeplayers around the operator for chunk-load testing
+* add `/fp stress randomwalk start|stop` with configurable movement, sprint, sneak, jump, use, attack, hotbar, and offhand-swap behavior
+* add `/fp stress mirror start|stop` to mirror operator movement, look direction, actions, hotbar changes, offhand swaps, and commands to fakeplayers
+* add bulk stress actions: use, attack, jump, swap, hotbar slot, hotbar random, and hotbar cycle
+* add reusable `stress` config profiles for spawn batching, spread Y placement, random walking, and mirror behavior
+* add randomwalk use/attack cooldowns and per-tick action budgets for realistic bounded interaction stress
+* add `/fp stress status` for fakeplayer counts, active stress tasks, active use/attack actions, and profile visibility
+* add mirror `commands-as-op`, `input-sync-window-ticks`, and `debug-inputs` config options
+* improve mirror movement to copy jump input, cancelled input events, packet-style hotbar selection, arm swings, and F-key/offhand swaps
+* add `auto-respawn-on-death` config option to automatically respawn fakeplayers after death
+* add `fakeplayer.command.stress` permission and include it under `fakeplayer.*`
+
+### Bug Fixes
+
+* update CommandAPI integration for CommandAPI 11.2.0 compatibility
+* fix custom fakeplayer command argument construction for newer CommandAPI versions
+* fix one-shot use actions getting stuck when an interaction fires events but is not consumed
+* harden fakeplayer network/channel cleanup during disconnect and plugin disable
+* clean up fakeplayer lifecycle handling so fakeplayers shut down more safely when the plugin unloads
+
+### Changes
+
+* make bundled config, comments, plugin metadata, README, and language resources English-only
+* change default config locale to `en`
+* change default message prefix to `FakePlayer`
+* change death defaults so fakeplayers are not kicked on death and auto-respawn is enabled
+
 ## [1.2.0](https://github.com/coderxi1/minecraft-fakeplayer/compare/v1.1.3...v1.2.0) (2026-03-24)
 
 

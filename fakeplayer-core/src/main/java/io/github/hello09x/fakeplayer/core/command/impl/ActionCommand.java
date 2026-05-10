@@ -34,7 +34,6 @@ public class ActionCommand extends AbstractCommand {
     }
 
     /**
-     * 执行动作
      */
     public void action(
             @NotNull CommandSender sender,
@@ -47,7 +46,6 @@ public class ActionCommand extends AbstractCommand {
                 && fake.getInventory().getItemInMainHand().getType() == Material.FISHING_ROD
                 && autofishManager.isAutofish(fake)
         ) {
-            // 如果是自动钓鱼则改为 1 次
             setting = ActionSetting.once();
         }
 

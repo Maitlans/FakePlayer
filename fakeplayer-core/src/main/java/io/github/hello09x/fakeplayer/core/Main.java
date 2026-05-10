@@ -15,10 +15,13 @@ import io.github.hello09x.fakeplayer.core.listener.FakeplayerLifecycleListener;
 import io.github.hello09x.fakeplayer.core.listener.FakeplayerListener;
 import io.github.hello09x.fakeplayer.core.listener.PlayerListener;
 import io.github.hello09x.fakeplayer.core.manager.FakeplayerAutofishManager;
+import io.github.hello09x.fakeplayer.core.manager.FakeplayerManager;
 import io.github.hello09x.fakeplayer.core.manager.FakeplayerReplenishManager;
+import io.github.hello09x.fakeplayer.core.manager.StressManager;
 import io.github.hello09x.fakeplayer.core.manager.WildFakeplayerManager;
 import io.github.hello09x.fakeplayer.core.manager.invsee.InvseeManager;
 import io.github.hello09x.fakeplayer.core.placeholder.FakeplayerPlaceholderExpansion;
+import io.github.hello09x.fakeplayer.core.repository.UsedIdRepository;
 import io.github.hello09x.fakeplayer.core.util.update.UpdateChecker;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -66,6 +69,7 @@ public final class Main extends JavaPlugin {
             manager.registerEvents(injector.getInstance(FakeplayerListener.class), this);
             manager.registerEvents(injector.getInstance(FakeplayerAutofishManager.class), this);
             manager.registerEvents(injector.getInstance(FakeplayerReplenishManager.class), this);
+            manager.registerEvents(injector.getInstance(StressManager.class), this);
             manager.registerEvents(injector.getInstance(InvseeManager.class), this);
         }
 
@@ -117,6 +121,11 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (injector != null) {
+            Exceptions.suppress(this, () -> injector.getInstance(FakeplayerManager.class).onDisable());
+            Exceptions.suppress(this, () -> injector.getInstance(UsedIdRepository.class).onDisable());
+        }
+
         {
             Exceptions.suppress(this, () -> {
                 var messenger = getServer().getMessenger();

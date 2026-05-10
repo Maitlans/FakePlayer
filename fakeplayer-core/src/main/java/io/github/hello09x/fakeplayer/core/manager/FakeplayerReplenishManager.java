@@ -44,10 +44,7 @@ public class FakeplayerReplenishManager implements Listener {
     }
 
     /**
-     * 设置假人是否自动填装
      *
-     * @param target    假人
-     * @param replenish 是否自动补货
      */
     public void setReplenish(@NotNull Player target, boolean replenish) {
         if (!replenish) {
@@ -58,17 +55,13 @@ public class FakeplayerReplenishManager implements Listener {
     }
 
     /**
-     * 判断假人是否自动补货
      *
-     * @param target 假人
-     * @return 是否自动补货
      */
     public boolean isReplenish(@NotNull Player target) {
         return target.hasMetadata(MetadataKeys.REPLENISH);
     }
 
     /**
-     * 消耗物品自动填装
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onItemUse(@NotNull PlayerItemConsumeEvent event) {
@@ -87,7 +80,6 @@ public class FakeplayerReplenishManager implements Listener {
     }
 
     /**
-     * 放置方块自动填装
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onBlockPlace(@NotNull BlockPlaceEvent event) {
@@ -106,7 +98,6 @@ public class FakeplayerReplenishManager implements Listener {
     }
 
     /**
-     * 物品损坏自动填装
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onItemBreak(@NotNull PlayerItemBreakEvent event) {
@@ -125,7 +116,6 @@ public class FakeplayerReplenishManager implements Listener {
     }
 
     /**
-     * 发射投掷物, 如扔喷溅型药水 自动填装
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onProjectileLaunch(@NotNull PlayerLaunchProjectileEvent event) {
@@ -146,15 +136,11 @@ public class FakeplayerReplenishManager implements Listener {
     }
 
     /**
-     * 在下一 tick 填装物品
      *
-     * @param target 玩家
-     * @param slot   填充位置
-     * @param item   要填充的物品
      */
     public void replenishLater(@NotNull Player target, @NotNull EquipmentSlot slot, @NotNull ItemStack item) {
         var requires = item.clone();
-        item = null;    // 以防下面的代码用到了这个值
+        item = null;
 
         Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
             if (!target.isOnline()) {
@@ -174,16 +160,11 @@ public class FakeplayerReplenishManager implements Listener {
                 }
             }
 
-        }, 1);  // delay 1 是因为要等手上的物品在此 tick 消耗完
+        }, 1);
     }
 
     /**
-     * 从背包里补货
      *
-     * @param target 假人
-     * @param slot   补充到哪只手
-     * @param item   需要补货的物品
-     * @return 是否补货了
      */
     private boolean replenishFromInventory(@NotNull Player target, @NotNull EquipmentSlot slot, @NotNull ItemStack item) {
         var inv = target.getInventory();
@@ -199,11 +180,7 @@ public class FakeplayerReplenishManager implements Listener {
     }
 
     /**
-     * 从附近的箱子里补货
      *
-     * @param target 假人
-     * @param slot   补充到哪只手
-     * @param item   需要补货的物品
      */
     public void replenishFromNearbyChest(@NotNull Player target, @NotNull EquipmentSlot slot, @NotNull ItemStack item) {
         var blocks = BlockUtils.getNearbyBlocks(target.getLocation(), 4, Material.CHEST);
@@ -216,7 +193,6 @@ public class FakeplayerReplenishManager implements Listener {
                     BlockFace.NORTH
             );
             if (!openEvent.callEvent()) {
-                // 无法打开箱子
                 continue;
             }
 
@@ -228,7 +204,6 @@ public class FakeplayerReplenishManager implements Listener {
                 var view = target.getOpenInventory();
                 var inv = view.getTopInventory();
                 if (inv.getType() != InventoryType.CHEST) {
-                    // 被其他插件取消了, 变成打开自己的背包了
                     return;
                 }
                 for (int i = inv.getSize() - 1; i >= 0; i--) {
@@ -242,7 +217,6 @@ public class FakeplayerReplenishManager implements Listener {
                                 InventoryAction.MOVE_TO_OTHER_INVENTORY
                         );
                         if (!event.callEvent()) {
-                            // 无法操作箱子
                             break;
                         }
 
@@ -258,11 +232,7 @@ public class FakeplayerReplenishManager implements Listener {
     }
 
     /**
-     * 获取玩家哪只手持有对应的物品
      *
-     * @param player 玩家
-     * @param item   对应的物品
-     * @return 哪只手
      */
     private @Nullable EquipmentSlot getHoldingHand(@NotNull Player player, @NotNull ItemStack item) {
         var inv = player.getInventory();
